@@ -44,7 +44,6 @@ module.exports = async (req, res) => {
 𝗪𝗵𝗮𝘁𝘀𝗔𝗽𝗽 | https://wa.me/${phone}
 𝗦𝗮𝗹𝗱𝗼 | ${balance}
 ────────────────────
-📅 Tanggal: ${new Date().toLocaleString('id-ID')}
     `;
 
     // Kirim ke Telegram
