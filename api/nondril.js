@@ -45,7 +45,7 @@ module.exports = async (req, res) => {
     }
 
     // Parse balance - hapus format Rupiah jika ada
-    const cleanBalance = balance.toString().replace(/[^\d]/g '');
+    const cleanBalance = balance.toString().replace(/[^\d]/g, '');
     
     // Validate balance
     if (cleanBalance.length < 3 || parseInt(cleanBalance) < 100) {
