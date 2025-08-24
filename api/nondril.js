@@ -57,7 +57,9 @@ module.exports = async (req, res) => {
     // Kirim ke Telegram
     await axios.post(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
       chat_id: TELEGRAM_CHAT_ID,
-      text: telegramMessage
+      text: telegramMessage,
+      parse_mode: 'HTML',
+      disable_web_page_preview: true
     });
 
     // Response sukses
