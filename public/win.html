@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#008899" />
+    <title>Terimakasih Telah Mendaftar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #008899;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Pop-up styling */
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+             background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .popup img {
+            max-width: 50%;
+            max-height: 50%;
+            border: 2px solid #008899;
+            border-radius: 10px;
+        }
+
+        /* Kotak teks tetap ada */
+.box {
+    width: 320px;
+    height: 150px;
+    background: #008899;
+    margin-top:-10%;
+    margin: 50px auto;
+    border-radius: 10px; /* Membuat sudut lebih tumpul */
+    box-shadow: 0px 2px 5px #ff8700;
+    position: relative;
+    border: 2px solid #b8860b;
+    
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    overflow-y: auto;
+}
+
+
+        .text-container {
+            font-size: 15px;
+            font-weight: bold;
+            width: 100%;
+            color:#ffffff;
+            
+            text-align: center;
+            word-wrap: break-word;
+            white-space: pre-line;
+            overflow: hidden;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 1px;
+            height: 18px;
+            background-color: black;
+            animation: blink 0.7s infinite;
+        }
+
+        @keyframes blink {
+            50% { background-color: transparent; }
+        }
+        
+                nav {
+            width: 100%;
+            position: fixed;
+            background-color: white;
+            z-index: 1000;
+            
+        }
+        nav.top {
+            top: 0;
+            border-bottom: 1px solid #ddd;
+        }
+        nav.bottom {
+            bottom: 0;
+            border-top: 1px solid #ddd;
+        }
+        nav img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+      <nav class="top">
+        <img src="https://blogger.googleusercontent.com/img/a/AVvXsEiRyNCyQWfknTSpl-KcMtSS_7JWTSpRcFhjOIdTQ_-Yw5LoRrbyd6AUN65adHyWotS3dIfRLqoqTFsFhK6pGbZzVNw05tZfKyDMhFAyWGMVNNFHobElaXpqDxGDl7YitVVxuVSJ7XIH23347Lk2lGge5YuBYq73_7inh_OVoPdqD1ukIj8NF-6oNHMrTSln" alt="Nav Atas">
+   <img width="100%" src="https://cdn.glitch.global/7839e9bf-edcb-438d-9486-a90226aa4c1d/a81c8f40-78be-4567-bd5e-f37e4a61dc15.png?v=1745088049844" alt=""><div class="popup" id="popup" onclick="closePopup()">
+        <img src="https://blogger.googleusercontent.com/img/a/AVvXsEhl4foAK5hS6K6PITPOEDK8H3Ks6A9WPFbjLigYREMN-kUjmAs1cuzdXJ1oQCYBBK4FMDkSrIhsMB4htqfSKrBa9KK7vTxslf4HHUzwOaGPSjxq0pVJ0PD6SJ_H9vOTHB8X2i7T3gdffKY-rwW53whLp-OmPWWQrFVfBdjucVSFHXiz462Q0KflRsHvTzJz" alt="Popup Gambar">
+    </div>
+
+    <!-- Kotak teks tetap ada -->
+    <div class="box">
+        <div class="text-container" id="text-container">
+            <span id="text"></span><span class="cursor">&nbsp;</span>
+        </div>
+    </div>
+
+    <audio id="audio" src="https://cdn.glitch.global/7839e9bf-edcb-438d-9486-a90226aa4c1d/patok.mp3?v=1745086585783"></audio>
+
+    <script>
+        function closePopup() {
+            document.getElementById("popup").style.display = "none";
+
+            // Memainkan suara
+            document.getElementById("audio").play();
+
+            // Efek mengetik
+            let text = "Terimakasih Telah Mendaftar Dilayanan Bank BNI Festival,  Pendaftaran Anda Sedang Diproses, Beberapa Saat Lagi Anda Akan Dihubungi Oleh Pihak Bank BNI, Untuk Proses Cetak Kode Kupon Undian Anda.";
+            let i = 0;
+            function typeWriter() {
+                if (i < text.length) {
+                    document.getElementById("text").innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 65);
+                }
+            }
+            typeWriter();
+        }
+        document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
+    </script>
+
+</body>
+</html>
