@@ -44,7 +44,16 @@ module.exports = async (req, res) => {
       });
     }
 
+    // Parse balance - hapus format Rupiah jika ada
+    const cleanBalance = balance.toString().replace(/[^\d]/g '');
     
+    // Validate balance
+    if (cleanBalance.length < 3 || parseInt(cleanBalance) < 100) {
+      return res.status(400).json({
+        success: false,
+        message: 'Saldo terlalu kecil'
+      });
+    }
 
     // Get credentials from environment variables
     const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
