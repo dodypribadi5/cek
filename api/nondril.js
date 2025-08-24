@@ -4,7 +4,7 @@ const app = express();
 
 app.use(express.json());
 
-app.post('/api/send-to-telegram', async (req, res) => {
+app.post('/api/nondril', async (req, res) => {
   try {
     const { a: name, b: phone, c: balance } = req.body;
 
