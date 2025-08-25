@@ -4,8 +4,8 @@ const axios = require('axios');
 const requestStore = new Map();
 
 // Konfigurasi rate limiting
-const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000; // 15 menit
-const MAX_REQUESTS_PER_WINDOW = 5; // Maksimal 5 request per 15 menit
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000; // 10 menit
+const MAX_REQUESTS_PER_WINDOW = 5; // Maksimal 5 request per 10 menit
 
 // Fungsi untuk membersihkan store lama
 setInterval(() => {
