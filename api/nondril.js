@@ -10,6 +10,13 @@ module.exports = async (req, res) => {
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
+
+const rateLimit = require('express-rate-limit');
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 menit
+  max: 100 // maksimal 100 request per windowMs
+});
   
   // Only allow POST requests
   if (req.method !== 'POST') {
